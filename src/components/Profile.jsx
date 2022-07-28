@@ -8,28 +8,30 @@ import { async } from "@firebase/util"
 export default function Profile() {
   const contextobj = useContext(authcontext);
   const cuser = contextobj;
-  const[loader,setLoader]=useState("")
+  const[loader,setLoader]=useState(true)
+  const[user,setUser] = useState(null);
   useEffect(function fn(){
     if(cuser){
       (async function(){
         const docref=doc(db , 'user' , cuser.uid);
-        const docsnap =  await getDoc(docref);
-        console.log(docsnap.data())  
-  
+        const userobj =  await getDoc(docref);
+        console.log(userobj.data())  
+        setLoader(false)
+        setUser(userobj.data())
       })()
     }
-  },[cuser])
+  },[])
   return (
     <>
-    {cuser==null?<h1>need to login</h1>:
+    {loader==true?<h1>Loading.....</h1>:
         <>
         <div className="header"></div>
         <div className="main-container">
           <div className="profileimg"><img src="https://nanny.org/wp-content/uploads/2021/11/profile-square.jpeg" alt="" /></div>
           <div className="profiledetails">
-            <div className="details">User <span>Name</span></div>
-            <div className="details">Posts <span>10</span></div>
-            <div className="details">Email <span>Email.com</span></div>
+            <div className="details">User <span>{user.name}</span></div>
+            <div className="details">Posts <span>{user.reelsId.length}</span></div>
+            <div className="details">Email <span>{user.email}</span></div>
           </div>
         </div>
         </>}
