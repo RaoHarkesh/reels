@@ -13,12 +13,12 @@ function App() {
   return (
    <AuthContextProvider>
    <Switch>
-    {/* <Route path='/feed'>
+    <Route path='/feed'>
       <Feed/>
-    </Route> */}
-    <PrivateRoute path='/feed' comp={feed}>
+    </Route>
+    {/* <PrivateRoute path='/feed' comp={feed}>
 
-    </PrivateRoute>
+    </PrivateRoute> */}
     
     {/* <RedirectToFeed path='/login' comp={Login}></RedirectToFeed> */}
     <Route path='/login'>
