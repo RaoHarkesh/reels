@@ -1,7 +1,7 @@
 import {auth, db} from '../Firebase'
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import {useState,React}  from 'react'
-import { addDoc , collection} from 'firebase/firestore';
+import { setDoc , doc} from 'firebase/firestore';
 export default function Signup() {
   const[email,setEmail]= useState("");
   const[password,setPassword]= useState("");
@@ -13,11 +13,14 @@ export default function Signup() {
     try{
       setLoader(true);
       let usercred = await createUserWithEmailAndPassword(auth , email , password);
-      const dbref = await addDoc(collection(db,'user'),{
+      await setDoc(doc(db, "user", usercred.user.uid), {
         email,
         name,
+        reelsId: [],
+        profileurl: "",
         userid : usercred.user.uid
-      })
+      });
+     
       setUser(usercred.user);
     }catch(error){
         setError(error.message)

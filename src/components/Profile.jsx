@@ -9,14 +9,16 @@ export default function Profile() {
   const contextobj = useContext(authcontext);
   const cuser = contextobj;
   const[loader,setLoader]=useState("")
-  // useEffect(function fn(){
-  //   (async function(){
-  //     const docref=doc(db , 'users' , cuser.uid);
-  //     const docsnap =  await getDoc(docref);
-  //     console.log("user data is = "+docsnap.data())  
-
-  //   })()
-  // },[cuser])
+  useEffect(function fn(){
+    if(cuser){
+      (async function(){
+        const docref=doc(db , 'user' , cuser.uid);
+        const docsnap =  await getDoc(docref);
+        console.log(docsnap.data())  
+  
+      })()
+    }
+  },[cuser])
   return (
     <>
     {cuser==null?<h1>need to login</h1>:
