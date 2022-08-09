@@ -13,9 +13,9 @@ function App() {
   return (
    <AuthContextProvider>
    <Switch>
-    <Route path='/feed'>
-      <Feed/>
-    </Route>
+    <PrivateRoute path='/feed' comp={Feed}>
+      
+    </PrivateRoute>
     {/* <PrivateRoute path='/feed' comp={feed}>
 
     </PrivateRoute> */}

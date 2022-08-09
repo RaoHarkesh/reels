@@ -52,16 +52,43 @@ export default function Login() {
      <>
      { 
     //  mainloader==true?<h1>...please wait</h1>:
-     error!=""?<h1>error is {error}</h1>:
-     loader==true?<h1>Loading....</h1>:
+     error!=""?<div className='login-main-div'>
+     <div className='login-box'>
+     <span className='logo-name'>Instagram</span>
+     <input type="text" placeholder='email' onChange={trackEmail}/>
+      
+      <input type="text" placeholder='password' onChange={trackPass} />
+      
+      <button onClick={printDetail}> login</button>
+      <span className='show-error'>Please enter valid credentials</span>
+     </div>
+     </div>:
+     loader==true?<div className='login-main-div'>
+     <div className='login-box'>
+     <span className='logo-name'>Instagram</span>
+     <input type="text" placeholder='email' onChange={trackEmail}/>
+      
+      <input type="text" placeholder='password' onChange={trackPass} />
+      
+      <button onClick={printDetail}> login</button>
+      <div style={{"marginTop":"40px"}} className="spinner-border text-primary" role="status"></div>
+     </div>
+     </div>:
      user!=null?<><h1>{user.uid}</h1><button onClick={Logout}>Signout</button></>:
      <>
-     
+     <div className='login-main-div'>
+     <div className='login-box'>
+     <span className='logo-name'>Instagram</span>
      <input type="text" placeholder='email' onChange={trackEmail}/>
-      <br></br>
+      
       <input type="text" placeholder='password' onChange={trackPass} />
-      <br></br>
+      
       <button onClick={printDetail}> login</button>
+      
+     </div>
+     </div>
+     
+     
      </>
      }
 
@@ -69,3 +96,14 @@ export default function Login() {
 
   )
 }
+
+{/* <div className='login-main-div'>
+<div className='login-box'>
+<span className='logo-name'>Instagram</span>
+<input type="text" placeholder='email' onChange={trackEmail}/>
+ 
+ <input type="text" placeholder='password' onChange={trackPass} />
+ 
+ <button onClick={printDetail}> login</button>
+</div>
+</div> */}
