@@ -1,11 +1,16 @@
 import React, { useState } from "react"
+import { setDoc, doc } from "firebase/firestore"
+import { db } from "../Firebase"
 import Videos from "./videos"
 import { signOut } from "firebase/auth"
 import { auth } from "../Firebase"
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../Firebase"
+import { useContext } from "react"
+import { authcontext } from "../context/AuthContext"
+import { async } from "@firebase/util"
 export default function Feed() {
-
+ let user = useContext(authcontext)
   return (
     <>
       <div className="feed-header">
@@ -52,11 +57,19 @@ export default function Feed() {
                 (error) => {
                   // Handle unsuccessful uploads
                 },
-                () => {
+                 () => {
                   // Handle successful uploads on complete
                   // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-                  getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    console.log('File available at', downloadURL);
+                  getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+                   console.log(downloadURL)
+                   console.log(user)
+
+                   await setDoc(doc(db, "posts", user.email`${name}`), {
+                    url:downloadURL,
+                    likes:[],
+                    comments:[],
+                    
+                  });
                   });
                 }
               );
