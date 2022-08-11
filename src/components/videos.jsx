@@ -1,65 +1,91 @@
-import { useState } from "react"
-const Videos=()=>{
-   const [playing,setPlaying] = useState(false)
+import { useContext, useState } from "react"
+import { setDoc, doc, updateDoc  } from "firebase/firestore"
+import { db } from "../Firebase"
+import { authcontext } from "../context/AuthContext"
+import { async } from "@firebase/util"
+import { useEffect } from "react"
+
+const Videos=(props)=>{
+  let user = useContext(authcontext) 
+  console.log()
+    
+
+  const [playing,setPlaying] = useState(false)
+  const[currentcomment,setCurrentCommet] = useState("")
+  const setComment = async (post)=>{
+    setCurrentCommet("") 
+    
+    let arr =post.comments
+     arr.push(currentcomment)
+     let commentarrayreference= doc(db, "posts", post.id);
+     await updateDoc(commentarrayreference,{
+      comments:arr
+     })
+    //  await setDoc(doc(db, "posts", post.id), {
+    //   comments:arr,
+    //   likes:post.likes,
+    //   url:post.url
+      
+    // });
+    // console.log("comment added")
+   alert("comment added")
+  } 
+  console.log("run")
    return(
     <>
-    <div className="single-reel">
-      <div className="upper-section">
-      <video className="video" onClick={(e)=>{
-      if(playing){
-        e.currentTarget.pause();
-        setPlaying(false)
-      }else{
-        e.currentTarget.play();
-        setPlaying(true)
-      }
-    }} src="https://firebasestorage.googleapis.com/v0/b/class-demo-94ab5.appspot.com/o/I%20am%20a%20rider%20%23fitmanjeet%20%23shorts%20%23fitmanjeetshorts%20%23bodybuilder%20%23trendring.mp4?alt=media&token=7324c572-22f5-4ffa-812b-7db2641b995e">
-     
-    </video>
-      </div>
-      <div className="bottom-section">
-        <span className="reel-title">Song name</span>
-        <input type="text" placeholder="comments" />    
-      </div>
-    </div>
-    <div className="single-reel">
-      <div className="upper-section">
-      <video className="video" onClick={(e)=>{
-      if(playing){
-        e.currentTarget.pause();
-        setPlaying(false)
-      }else{
-        e.currentTarget.play();
-        setPlaying(true)
-      }
-    }} src="">
-     
-    </video>
-      </div>
-      <div className="bottom-section">
-        <span className="reel-title">Song name</span>
-        <input type="text" placeholder="comments" />    
-      </div>
-    </div>
-    <div className="single-reel">
-      <div className="upper-section">
-      <video className="video" onClick={(e)=>{
-      if(playing){
-        e.currentTarget.pause();
-        setPlaying(false)
-      }else{
-        e.currentTarget.play();
-        setPlaying(true)
-      }
-    }} src="">
-     
-    </video>
-      </div>
-      <div className="bottom-section">
-        <span className="reel-title">Song name</span>
-        <input type="text" placeholder="comments" />    
-      </div>
-    </div>
+    
+    {
+      props.data.map((post)=>{
+        
+        return(
+          <div className="video-card">
+          <div key={post.id} className="single-reel">
+          <div className="upper-section">
+          <video className="video" onClick={(e)=>{
+          if(playing){
+            e.currentTarget.pause();
+            setPlaying(false)
+          }else{
+            e.currentTarget.play();
+            setPlaying(true)
+          }
+        }} src={post.url}>
+           
+        </video>
+          
+          </div>
+          
+       
+          <div className="bottom-section">
+            <span className="reel-title">Song name</span>
+          
+            <input value={currentcomment} onChange={(e)=>setCurrentCommet(e.currentTarget.value)} type="text" placeholder="comments" />
+            <button onClick={()=>setComment(post)} >post</button>    
+          </div>
+        </div>
+        <div className="all-comments">
+        {
+          post.comments.map((comment)=>{
+            return(
+              
+              <div key={comment.length} className="single-comment">
+               {comment}
+              </div>
+          
+              
+            )
+          })
+        }
+         </div>
+      
+        </div>      
+        )
+      })
+    }
+   
+           
+         
+    
     </>
    )    
 }

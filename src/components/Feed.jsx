@@ -9,8 +9,21 @@ import { storage } from "../Firebase"
 import { useContext } from "react"
 import { authcontext } from "../context/AuthContext"
 import { async } from "@firebase/util"
+import { collection, getDocs } from "firebase/firestore";
+import { useEffect } from "react"
 export default function Feed() {
  let user = useContext(authcontext)
+ const[postarr, setPostarr] =useState([])
+ useEffect(async ()=>{
+  let arr=[]
+  const querySnapshot = await getDocs(collection(db, "posts"));
+  querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    console.log(doc.id, " => ", doc.data());
+    arr.push({id:doc.id, ...doc.data() })
+  });
+  setPostarr(arr)
+ },[])
   return (
     <>
       <div className="feed-header">
@@ -64,7 +77,7 @@ export default function Feed() {
                    console.log(downloadURL)
                    console.log(user)
 
-                   await setDoc(doc(db, "posts", user.email`${name}`), {
+                   await setDoc(doc(db, "posts", `${Date.now()}`), {
                     url:downloadURL,
                     likes:[],
                     comments:[],
@@ -81,7 +94,7 @@ export default function Feed() {
       </div>
       <div className="reels-container">
         <div className="reels-middle-box">
-          <Videos />
+          <Videos data={postarr} />
         </div>
 
       </div>
